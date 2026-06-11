@@ -1,0 +1,1 @@
+# ProductGenius-ECommerce-Bulk-Content-Generator
