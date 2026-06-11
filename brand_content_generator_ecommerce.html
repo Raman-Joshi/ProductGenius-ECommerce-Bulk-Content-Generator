@@ -1,0 +1,1465 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ProductGenius Ultimate Edition: The ultimate bulk content generator for e-commerce. Automatically generate high-quality product descriptions and specifications in batches using AI." />
+    <meta name="keywords" content="bulk content generator, ecommerce product descriptions, AI content generation, Gemini API, product content automation" />
+    <meta name="author" content="ProductGenius" />
+    <meta property="og:title" content="ProductGenius - Ultimate Bulk Edition" />
+    <meta property="og:description" content="Generate bulk product descriptions and specifications for e-commerce using AI." />
+    <meta property="og:type" content="website" />
+    <title>ProductGenius - Ultimate Bulk Edition</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .progress-bar {
+        transition: width 0.5s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-800 min-h-screen">
+    <!-- Header -->
+    <header
+      class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-indigo-200 shadow-md"
+          >
+            P
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-slate-800 tracking-tight">
+              ProductGenius
+            </h1>
+            <span
+              class="text-[10px] uppercase tracking-wider font-semibold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100"
+              >Ultimate Edition</span
+            >
+          </div>
+        </div>
+
+        <nav class="flex gap-1 bg-slate-100 p-1 rounded-lg">
+          <button
+            onclick="app.switchTab('input')"
+            id="tab-input"
+            class="px-4 py-1.5 text-sm font-medium rounded-md transition-all text-slate-500 hover:text-slate-700"
+          >
+            Input
+          </button>
+          <button
+            onclick="app.switchTab('dashboard')"
+            id="tab-dashboard"
+            class="px-4 py-1.5 text-sm font-medium rounded-md transition-all text-slate-500 hover:text-slate-700"
+          >
+            Dashboard
+          </button>
+          <button
+            onclick="app.switchTab('settings')"
+            id="tab-settings"
+            class="px-4 py-1.5 text-sm font-medium rounded-md transition-all text-slate-500 hover:text-slate-700"
+          >
+            Settings
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+      id="main-container"
+    >
+      <!-- INPUT TAB -->
+      <div id="view-input" class="hidden max-w-2xl mx-auto space-y-6 fade-in">
+        <div class="text-center space-y-2 mb-8">
+          <h2 class="text-3xl font-bold text-slate-900">Add Products</h2>
+          <p class="text-slate-500">
+            Paste your list below. For large batches (5000+), configure your
+            <strong>Key Pool</strong> in Settings first.
+          </p>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 space-y-6"
+        >
+          <!-- Default Company -->
+          <div
+            class="space-y-2 p-4 bg-slate-50 rounded-lg border border-slate-200"
+          >
+            <label
+              class="text-sm font-semibold text-slate-700 flex items-center gap-2"
+            >
+              <i data-lucide="building-2" class="w-4 h-4"></i> Global Company /
+              Brand (Optional)
+            </label>
+            <input
+              type="text"
+              id="input-company"
+              placeholder="e.g., ASUS, Corsair, Samsung"
+              class="w-full px-4 py-2 rounded-md border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
+            />
+          </div>
+
+          <!-- Text Area -->
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700"
+              >Product List (One per line)</label
+            >
+            <div class="text-xs text-slate-500 mb-2 flex items-center gap-2">
+              <span
+                class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 font-mono"
+                >Format:</span
+              >
+              <span class="font-mono text-indigo-600">Product Name</span>
+              <span class="text-slate-400">or</span>
+              <span class="font-mono text-indigo-600"
+                >Product Name | Brand</span
+              >
+            </div>
+            <textarea
+              id="input-text"
+              placeholder="GeForce RTX 4090&#10;Ryzen 9 7950X&#10;Intel Core i9-13900K"
+              class="w-full h-64 p-4 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm resize-none transition-all"
+            ></textarea>
+          </div>
+
+          <div class="flex justify-between items-center pt-2">
+            <span class="text-xs text-slate-500 font-medium" id="item-count"
+              >0 items detected</span
+            >
+            <button
+              onclick="app.addProducts()"
+              id="btn-add"
+              disabled
+              class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold shadow-md shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95"
+            >
+              <i data-lucide="plus" class="w-4 h-4"></i> Add to Queue
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD TAB -->
+      <div id="view-dashboard" class="hidden space-y-6 fade-in">
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div
+            class="p-4 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm border border-slate-200"
+          >
+            <span class="text-3xl font-bold text-slate-700" id="stat-total"
+              >0</span
+            >
+            <span
+              class="text-xs text-slate-500 uppercase tracking-wider font-semibold"
+              >Total</span
+            >
+          </div>
+          <div
+            class="p-4 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm border border-emerald-200 bg-emerald-50"
+          >
+            <span
+              class="text-3xl font-bold text-emerald-600"
+              id="stat-completed"
+              >0</span
+            >
+            <span
+              class="text-xs text-emerald-600 uppercase tracking-wider font-semibold"
+              >Completed</span
+            >
+          </div>
+          <div
+            class="p-4 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm border border-blue-200 bg-blue-50"
+          >
+            <span class="text-3xl font-bold text-blue-600" id="stat-queue"
+              >0</span
+            >
+            <span
+              class="text-xs text-blue-600 uppercase tracking-wider font-semibold"
+              >Queue</span
+            >
+          </div>
+          <div
+            class="p-4 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm border border-red-200 bg-red-50"
+          >
+            <span class="text-3xl font-bold text-red-600" id="stat-failed"
+              >0</span
+            >
+            <span
+              class="text-xs text-red-600 uppercase tracking-wider font-semibold"
+              >Failed</span
+            >
+          </div>
+        </div>
+
+        <!-- Progress & Cooldown Bar -->
+        <div
+          id="progress-container"
+          class="hidden w-full space-y-2 mb-2 bg-white p-3 rounded-xl border border-slate-200 shadow-sm animate-in fade-in"
+        >
+          <div class="flex justify-between items-center text-xs">
+            <div class="flex items-center gap-2">
+              <i
+                data-lucide="loader-2"
+                class="w-4 h-4 text-indigo-600 animate-spin"
+                id="status-icon"
+              ></i>
+              <span id="status-message" class="font-bold text-slate-700"
+                >Processing...</span
+              >
+            </div>
+            <span
+              id="cooldown-badge"
+              class="hidden bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-mono font-bold"
+            >
+              Cooling Down: <span id="cooldown-seconds">0</span>s
+            </span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+            <div
+              id="progress-bar"
+              class="bg-indigo-600 h-2 rounded-full progress-bar"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div
+          class="flex flex-wrap gap-4 items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm"
+        >
+          <div class="flex items-center gap-2">
+            <button
+              onclick="app.toggleProcessing()"
+              id="btn-process"
+              disabled
+              class="flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200 shadow-md disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            >
+              <i data-lucide="play" class="w-4 h-4"></i> Start Auto-Process
+            </button>
+
+            <button
+              onclick="app.retryFailed()"
+              id="btn-retry"
+              style="display: none"
+              class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all bg-white border border-red-200 text-red-600 hover:bg-red-50 shadow-sm"
+            >
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> Retry Failed
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <div
+              class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono mr-2"
+            >
+              <i data-lucide="key" class="w-3 h-3 text-amber-500"></i>
+              <span id="active-key-label">No Keys</span>
+            </div>
+
+            <div class="relative group">
+              <button
+                class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-sm font-medium transition-colors"
+              >
+                <i data-lucide="download" class="w-4 h-4"></i> Export
+              </button>
+              <div
+                class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+              >
+                <button
+                  onclick="app.exportCSV()"
+                  class="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700 border-b border-slate-100 first:rounded-t-lg"
+                >
+                  <i data-lucide="file-text" class="w-4 h-4"></i> Download CSV
+                </button>
+                <button
+                  onclick="app.exportJSON()"
+                  class="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700 last:rounded-b-lg"
+                >
+                  <i data-lucide="code" class="w-4 h-4"></i> Download JSON
+                </button>
+              </div>
+            </div>
+
+            <button
+              onclick="app.clearData()"
+              class="flex items-center gap-2 px-4 py-2 bg-white border border-red-200 hover:bg-red-50 text-red-600 rounded-lg text-sm font-medium transition-colors"
+            >
+              <i data-lucide="trash-2" class="w-4 h-4"></i> Clear All
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div
+          class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col"
+        >
+          <div class="overflow-x-auto min-h-[400px]">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th class="px-6 py-3 font-semibold text-slate-700 w-1/4">
+                    Product Name
+                  </th>
+                  <th class="px-6 py-3 font-semibold text-slate-700 w-24">
+                    Status
+                  </th>
+                  <th class="px-6 py-3 font-semibold text-slate-700 w-1/2">
+                    Generated Content Preview
+                  </th>
+                  <th class="px-6 py-3 font-semibold text-slate-700 text-right">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="table-body" class="divide-y divide-slate-100 bg-white">
+                <!-- Rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div
+            class="border-t border-slate-200 p-4 bg-slate-50 flex items-center justify-between"
+          >
+            <span
+              class="text-xs text-slate-500 font-medium"
+              id="pagination-info"
+              >Showing 0-0 of 0</span
+            >
+            <div class="flex gap-2">
+              <button
+                onclick="app.prevPage()"
+                id="btn-prev"
+                disabled
+                class="p-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <button
+                onclick="app.nextPage()"
+                id="btn-next"
+                disabled
+                class="p-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="view-settings" class="hidden max-w-xl mx-auto space-y-6 fade-in">
+        <div class="text-center space-y-2 mb-8">
+          <h2 class="text-2xl font-bold text-slate-900">
+            System Configuration
+          </h2>
+          <p class="text-slate-500">
+            Manage your keys and processing parameters.
+          </p>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 space-y-6"
+        >
+          <div class="space-y-2">
+            <label
+              class="block text-sm font-semibold text-slate-700 flex items-center gap-2 justify-between"
+            >
+              <span>Gemini API Key Pool</span>
+              <span
+                class="text-[10px] font-normal text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100"
+                >One key per line</span
+              >
+            </label>
+            <div class="relative">
+              <textarea
+                id="api-keys"
+                placeholder="AIzaSy...Key1&#10;AIzaSy...Key2&#10;AIzaSy...Key3"
+                class="w-full h-32 pl-4 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-xs shadow-sm resize-none"
+              ></textarea>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              The system automatically rotates through these keys. If a key hits
+              a "429 Rate Limit", it switches to the next one immediately.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700"
+                >Batch Size</label
+              >
+              <select
+                id="setting-batch"
+                class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 bg-white"
+              >
+                <option value="1">1 Item (Maximum Stability)</option>
+                <option value="3">3 Items (Recommended)</option>
+                <option value="5">5 Items (Fastest - 5x)</option>
+              </select>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700"
+                >Request Delay</label
+              >
+              <select
+                id="setting-delay"
+                class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 bg-white"
+              >
+                <option value="1500">Normal (1.5s)</option>
+                <option value="3000">Slow (3s)</option>
+                <option value="5000">Bulk Safe (5s)</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            class="p-4 bg-emerald-50 rounded-lg border border-emerald-100 flex gap-3"
+          >
+            <i
+              data-lucide="shield-check"
+              class="text-emerald-600 shrink-0 w-5 h-5"
+            ></i>
+            <div class="space-y-1">
+              <p class="text-sm font-semibold text-emerald-800">
+                Smart Rotation System
+              </p>
+              <p class="text-xs text-emerald-700">
+                Auto-failover enabled. If all keys are exhausted, the system
+                pauses for 20s to cool down before retrying.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button
+              onclick="app.saveSettings()"
+              class="px-6 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 shadow-md transition-all active:scale-95"
+            >
+              Save Configuration
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Detailed Modal (View/Edit) -->
+    <div
+      id="modal-overlay"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+    >
+      <div
+        class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden"
+      >
+        <!-- Modal Header -->
+        <div
+          class="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50"
+        >
+          <div class="flex flex-col">
+            <h3 class="font-bold text-lg text-slate-800" id="modal-title">
+              Product Name
+            </h3>
+            <span class="text-xs text-slate-500" id="modal-subtitle"
+              >ID: 12345</span
+            >
+          </div>
+          <div class="flex gap-2">
+            <span id="modal-status-badge"></span>
+            <button
+              onclick="app.closeModal()"
+              class="p-1.5 hover:bg-slate-200 rounded-full transition-colors text-slate-500"
+            >
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div
+          class="flex-1 overflow-y-auto p-6 bg-white"
+          id="modal-body-details"
+        >
+          <div class="space-y-4">
+            <!-- Description Field -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label
+                  class="text-sm font-semibold text-slate-700 uppercase tracking-wider"
+                  >Description</label
+                >
+                <span class="text-xs text-slate-400">Editable</span>
+              </div>
+              <textarea
+                id="edit-description"
+                class="w-full h-32 p-3 rounded-lg border border-slate-200 text-sm text-slate-700 leading-relaxed focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              ></textarea>
+            </div>
+
+            <!-- Specs Field -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label
+                  class="text-sm font-semibold text-slate-700 uppercase tracking-wider"
+                  >Specifications</label
+                >
+                <span class="text-xs text-slate-400">Editable</span>
+              </div>
+              <textarea
+                id="edit-specs"
+                class="w-full h-32 p-3 rounded-lg border border-slate-200 text-xs font-mono text-slate-700 leading-relaxed focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 whitespace-pre-wrap"
+              ></textarea>
+            </div>
+
+            <!-- Link -->
+            <div class="pt-2">
+              <a
+                id="link-image"
+                href="#"
+                target="_blank"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors border border-blue-100"
+              >
+                <i data-lucide="image" class="w-4 h-4"></i> Verify Image on
+                Google
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div
+          class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3"
+        >
+          <button
+            onclick="app.closeModal()"
+            class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="app.saveProductEdits()"
+            id="btn-save-edits"
+            class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-medium transition-colors shadow-sm"
+          >
+            <i data-lucide="save" class="w-4 h-4 inline mr-1"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div
+      id="toast-container"
+      class="fixed bottom-4 right-4 z-[100] w-80 pointer-events-none space-y-2"
+    ></div>
+
+    <script>
+      /**
+       * ProductGenius - Ultimate Bulk Edition
+       */
+
+      // --- Robust IndexedDB Helper ---
+      const dbHelper = {
+        dbName: "ProductGeniusDB",
+        storeName: "products",
+        version: 1,
+        db: null,
+
+        async init() {
+          return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.version);
+            request.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains(this.storeName)) {
+                db.createObjectStore(this.storeName, { keyPath: "id" });
+              }
+            };
+            request.onsuccess = (e) => {
+              this.db = e.target.result;
+              resolve(this.db);
+            };
+            request.onerror = (e) => reject(e);
+          });
+        },
+        async getAll() {
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(this.storeName, "readonly");
+            const store = tx.objectStore(this.storeName);
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+          });
+        },
+        async addMany(items) {
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(this.storeName, "readwrite");
+            const store = tx.objectStore(this.storeName);
+            items.forEach((item) => store.put(item));
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        },
+        async updateMany(items) {
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(this.storeName, "readwrite");
+            const store = tx.objectStore(this.storeName);
+            items.forEach((item) => store.put(item));
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        },
+        async delete(id) {
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(this.storeName, "readwrite");
+            const store = tx.objectStore(this.storeName);
+            store.delete(id);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        },
+        async clear() {
+          return new Promise((resolve, reject) => {
+            const tx = this.db.transaction(this.storeName, "readwrite");
+            const store = tx.objectStore(this.storeName);
+            store.clear();
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        },
+      };
+
+      const app = {
+        state: {
+          apiKeys: JSON.parse(localStorage.getItem("pg_api_keys") || "[]"),
+          currentKeyIndex: 0,
+          products: [],
+          isProcessing: false,
+          activeTab: "input",
+          activeModalProduct: null,
+          abortController: null,
+          currentPage: 1,
+          itemsPerPage: 50,
+          processDelay: parseInt(localStorage.getItem("pg_delay") || "1500"),
+          batchSize: parseInt(localStorage.getItem("pg_batch") || "3"),
+        },
+
+        async init() {
+          await dbHelper.init();
+          this.state.products = await dbHelper.getAll();
+
+          // Recovery logic: Reset "processing" items to "pending" on load
+          // This fixes the "stuck on processing" issue if browser was closed
+          let recoverCount = 0;
+          this.state.products = this.state.products.map((p) => {
+            if (p.status === "processing") {
+              recoverCount++;
+              return { ...p, status: "pending" };
+            }
+            return p;
+          });
+          if (recoverCount > 0) {
+            await dbHelper.updateMany(
+              this.state.products.filter((p) => p.status === "pending"),
+            );
+            this.showToast(`Recovered ${recoverCount} pending items.`, "info");
+          }
+
+          // Load Settings
+          const keys = this.state.apiKeys;
+          document.getElementById("api-keys").value = keys.join("\n");
+          document.getElementById("setting-delay").value =
+            this.state.processDelay;
+          document.getElementById("setting-batch").value = this.state.batchSize;
+
+          this.updateActiveKeyLabel();
+
+          // Listeners
+          document
+            .getElementById("input-text")
+            .addEventListener("input", (e) => {
+              const count = e.target.value
+                .split("\n")
+                .filter((l) => l.trim()).length;
+              document.getElementById("item-count").textContent =
+                `${count} items detected`;
+              document.getElementById("btn-add").disabled = count === 0;
+            });
+
+          document
+            .getElementById("setting-delay")
+            .addEventListener("change", (e) => {
+              this.state.processDelay = parseInt(e.target.value);
+              localStorage.setItem("pg_delay", this.state.processDelay);
+            });
+
+          document
+            .getElementById("setting-batch")
+            .addEventListener("change", (e) => {
+              this.state.batchSize = parseInt(e.target.value);
+              localStorage.setItem("pg_batch", this.state.batchSize);
+            });
+
+          this.switchTab("input");
+          this.renderDashboard();
+          lucide.createIcons();
+        },
+
+        // --- Key Management ---
+        updateActiveKeyLabel() {
+          const count = this.state.apiKeys.length;
+          const idx = this.state.currentKeyIndex;
+          const lbl = document.getElementById("active-key-label");
+          if (count === 0) {
+            lbl.textContent = "No Keys Configured";
+            lbl.className = "text-red-500 font-bold";
+          } else {
+            lbl.textContent = `Using Key ${idx + 1} of ${count}`;
+            lbl.className = "text-slate-700 font-semibold";
+          }
+        },
+
+        saveSettings() {
+          const rawKeys = document.getElementById("api-keys").value;
+          const keys = rawKeys
+            .split("\n")
+            .map((k) => k.trim())
+            .filter((k) => k.length > 0);
+          this.state.apiKeys = keys;
+          localStorage.setItem("pg_api_keys", JSON.stringify(keys));
+          this.state.currentKeyIndex = 0;
+          this.updateActiveKeyLabel();
+          this.switchTab("dashboard");
+          this.showToast(`Saved ${keys.length} API Keys`, "success");
+        },
+
+        getCurrentKey() {
+          if (this.state.apiKeys.length === 0) return "";
+          return this.state.apiKeys[
+            this.state.currentKeyIndex % this.state.apiKeys.length
+          ];
+        },
+
+        rotateKey() {
+          if (this.state.apiKeys.length <= 1) return false;
+          this.state.currentKeyIndex =
+            (this.state.currentKeyIndex + 1) % this.state.apiKeys.length;
+          this.updateActiveKeyLabel();
+
+          // Show specific feedback
+          const statusMsg = document.getElementById("status-message");
+          statusMsg.textContent = `Key Limit Hit. Rotating to Key ${this.state.currentKeyIndex + 1}...`;
+
+          this.showToast(
+            `Switched to API Key #${this.state.currentKeyIndex + 1}`,
+            "info",
+          );
+          return true;
+        },
+
+        // --- Navigation ---
+        switchTab(tabName) {
+          this.state.activeTab = tabName;
+          ["input", "dashboard", "settings"].forEach((t) => {
+            document.getElementById(`view-${t}`).classList.add("hidden");
+            const btn = document.getElementById(`tab-${t}`);
+            btn.classList.remove("bg-white", "text-indigo-700", "shadow-sm");
+            btn.classList.add("text-slate-500");
+          });
+          document.getElementById(`view-${tabName}`).classList.remove("hidden");
+          const activeBtn = document.getElementById(`tab-${tabName}`);
+          activeBtn.classList.add("bg-white", "text-indigo-700", "shadow-sm");
+          activeBtn.classList.remove("text-slate-500");
+          if (tabName === "dashboard") this.renderDashboard();
+        },
+
+        // --- Core Logic ---
+        async addProducts() {
+          const text = document.getElementById("input-text").value;
+          const defaultCompany = document
+            .getElementById("input-company")
+            .value.trim();
+          if (!text.trim()) return;
+
+          const lines = text
+            .split("\n")
+            .filter((line) => line.trim().length > 0);
+          const newProducts = lines.map((line) => {
+            const parts = line.split("|");
+            const name = parts[0].trim();
+            const company = parts[1] ? parts[1].trim() : defaultCompany;
+            return {
+              id: crypto.randomUUID(),
+              name: name,
+              company: company,
+              status: "pending",
+              description: "",
+              imageLink: "",
+              specs: "",
+              error: null,
+              createdAt: Date.now(),
+            };
+          });
+
+          const existingKeys = new Set(
+            this.state.products.map(
+              (p) => `${p.name.toLowerCase()}-${p.company.toLowerCase()}`,
+            ),
+          );
+          const uniqueNewProducts = newProducts.filter(
+            (p) =>
+              !existingKeys.has(
+                `${p.name.toLowerCase()}-${p.company.toLowerCase()}`,
+              ),
+          );
+
+          if (uniqueNewProducts.length < newProducts.length) {
+            this.showToast(
+              `Skipped ${newProducts.length - uniqueNewProducts.length} duplicates.`,
+              "warning",
+            );
+          }
+
+          await dbHelper.addMany(uniqueNewProducts);
+          this.state.products = [...this.state.products, ...uniqueNewProducts];
+
+          document.getElementById("input-text").value = "";
+          document.getElementById("item-count").textContent =
+            "0 items detected";
+          document.getElementById("btn-add").disabled = true;
+
+          this.showToast(
+            `Added ${uniqueNewProducts.length} products.`,
+            "success",
+          );
+          this.switchTab("dashboard");
+        },
+
+        async clearData() {
+          if (confirm("Are you sure? This clears all data locally.")) {
+            this.state.products = [];
+            this.state.isProcessing = false;
+            await dbHelper.clear();
+            this.renderDashboard();
+            this.showToast("All data cleared.", "info");
+          }
+        },
+
+        toggleProcessing() {
+          if (this.state.apiKeys.length === 0) {
+            alert("Please enter API Keys in Settings.");
+            this.switchTab("settings");
+            return;
+          }
+          if (this.state.isProcessing) {
+            if (this.state.abortController) this.state.abortController.abort();
+            this.state.isProcessing = false;
+            document
+              .getElementById("progress-container")
+              .classList.add("hidden");
+            this.showToast("Processing paused.", "warning");
+          } else {
+            this.state.isProcessing = true;
+            document
+              .getElementById("progress-container")
+              .classList.remove("hidden");
+            this.processNextBatch();
+          }
+          this.updateProcessButton();
+        },
+
+        retryFailed() {
+          let count = 0;
+          this.state.products = this.state.products.map((p) => {
+            if (p.status === "failed") {
+              count++;
+              return { ...p, status: "pending", error: null };
+            }
+            return p;
+          });
+
+          if (count > 0) {
+            dbHelper.updateMany(
+              this.state.products.filter((p) => p.status === "pending"),
+            );
+            this.showToast(
+              `Queued ${count} failed items for retry.`,
+              "success",
+            );
+            this.renderDashboard();
+          }
+        },
+
+        // --- Advanced Batch Processing ---
+        async processNextBatch() {
+          // GUARD: Check if user paused (Fixes the runaway recursion issue)
+          if (!this.state.isProcessing) return;
+
+          // 1. Get Batch
+          const pendingItems = this.state.products
+            .filter((p) => p.status === "pending")
+            .slice(0, this.state.batchSize);
+
+          if (pendingItems.length === 0) {
+            this.state.isProcessing = false;
+            this.updateProcessButton();
+            this.showToast("Queue finished!", "success");
+            document.getElementById("status-message").textContent =
+              "Queue finished.";
+            document
+              .getElementById("progress-container")
+              .classList.add("hidden");
+            this.renderDashboard();
+            return;
+          }
+
+          // 2. Set UI Processing
+          const processingItems = pendingItems.map((p) => ({
+            ...p,
+            status: "processing",
+            error: null,
+          }));
+
+          // CRITICAL FIX: Ensure DB stays in sync before we start API calls
+          try {
+            await dbHelper.updateMany(processingItems);
+            // Update in-memory state
+            processingItems.forEach((p) => {
+              const idx = this.state.products.findIndex((x) => x.id === p.id);
+              if (idx !== -1) this.state.products[idx] = p;
+            });
+          } catch (e) {
+            console.error("DB Error:", e);
+            this.state.isProcessing = false; // Emergency stop
+            this.showToast("Database Error. Stopped.", "error");
+            return;
+          }
+
+          document.getElementById("status-message").textContent =
+            `Researching batch of ${pendingItems.length}...`;
+          this.renderDashboard();
+
+          let nextDelay = this.state.processDelay;
+          let batchSuccess = false;
+          let retryCount = 0;
+          const maxRetries = Math.max(1, this.state.apiKeys.length);
+
+          // 3. Loop until success or all keys exhausted
+          try {
+            while (!batchSuccess && retryCount < maxRetries) {
+              if (!this.state.isProcessing) break;
+
+              try {
+                const currentKey = this.getCurrentKey();
+
+                const itemsList = processingItems
+                  .map(
+                    (p) =>
+                      `- ID: ${p.id}\n  Product: ${p.name} ${p.company ? `(by ${p.company})` : ""}`,
+                  )
+                  .join("\n");
+
+                const systemPrompt = `You are an expert ecommerce copywriter.
+                            Task: Research the following products using Google Search.
+                            
+                            Products:
+                            ${itemsList}
+                            
+                            Requirements:
+                            1. Return a JSON ARRAY containing one object per product.
+                            2. Object Format: { "id": "MATCHING_ID", "description": "Professional 120-word description.", "specs": "• bullet points", "image_query": "specific search term" }
+                            3. Do not include HSN codes.
+                            4. IMPORTANT: Return ONLY raw JSON. No markdown ticks.
+                            `;
+
+                this.state.abortController = new AbortController();
+
+                const response = await fetch(
+                  `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${currentKey}`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      contents: [{ parts: [{ text: systemPrompt }] }],
+                    }),
+                    signal: this.state.abortController.signal,
+                  },
+                );
+
+                if (!response.ok) {
+                  const err = await response.json().catch(() => ({}));
+                  const errMsg = err.error?.message || response.statusText;
+
+                  if (
+                    response.status === 429 ||
+                    errMsg.toLowerCase().includes("exhausted") ||
+                    errMsg.toLowerCase().includes("quota")
+                  ) {
+                    throw new Error("Rate Limit Exceeded");
+                  }
+                  throw new Error(errMsg);
+                }
+
+                const data = await response.json();
+                let resultText =
+                  data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!resultText) throw new Error("Empty response");
+
+                // Explicitly remove markdown code blocks
+                resultText = resultText.replace(/```json\n?|```/g, "").trim();
+
+                const resultsArray = this.extractJSON(resultText);
+                if (!Array.isArray(resultsArray))
+                  throw new Error("Invalid JSON: Not an array");
+
+                const completedItems = [];
+                const failedItems = [];
+
+                processingItems.forEach((p) => {
+                  const result = resultsArray.find((r) => r.id === p.id);
+                  if (result) {
+                    const searchQuery = p.company
+                      ? `${p.name} ${p.company} official image`
+                      : `${p.name} official product image`;
+                    completedItems.push({
+                      ...p,
+                      status: "completed",
+                      description: result.description,
+                      specs: result.specs,
+                      imageLink: `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(searchQuery)}`,
+                    });
+                  } else {
+                    failedItems.push({
+                      ...p,
+                      status: "failed",
+                      error: "AI skipped item in batch",
+                    });
+                  }
+                });
+
+                const updates = [...completedItems, ...failedItems];
+                await dbHelper.updateMany(updates);
+
+                // Sync state
+                updates.forEach((u) => {
+                  const idx = this.state.products.findIndex(
+                    (x) => x.id === u.id,
+                  );
+                  if (idx !== -1) this.state.products[idx] = u;
+                });
+
+                this.showToast(`Batch completed!`, "success");
+                batchSuccess = true;
+              } catch (err) {
+                if (err.name === "AbortError") return;
+
+                console.error(
+                  `Key ${this.state.currentKeyIndex + 1} failed:`,
+                  err,
+                );
+
+                if (err.message.includes("Rate Limit")) {
+                  this.showToast(
+                    `Key ${this.state.currentKeyIndex + 1} quota hit. Switching...`,
+                    "warning",
+                  );
+                  const rotated = this.rotateKey();
+                  retryCount++;
+                  if (rotated) continue;
+                  else break; // No more keys
+                } else {
+                  // Non-rate error (e.g. JSON parse), do not rotate key, just fail the batch
+                  const failedBatch = processingItems.map((p) => ({
+                    ...p,
+                    status: "failed",
+                    error: `Error: ${err.message}`,
+                  }));
+                  await dbHelper.updateMany(failedBatch);
+                  failedBatch.forEach((u) => {
+                    const idx = this.state.products.findIndex(
+                      (x) => x.id === u.id,
+                    );
+                    if (idx !== -1) this.state.products[idx] = u;
+                  });
+                  this.showToast(`Batch failed: ${err.message}`, "error");
+                  batchSuccess = true; // Stop retrying this batch, move to next
+                }
+              }
+            } // End Loop
+          } catch (globalErr) {
+            // Safety net
+            console.error("Global Batch Error", globalErr);
+            this.state.isProcessing = false;
+            this.updateProcessButton();
+            return;
+          }
+
+          // Global Cooldown if all keys failed (Rate Limit on all)
+          if (!batchSuccess && this.state.isProcessing) {
+            this.showToast(
+              "All keys exhausted. Starting cooldown...",
+              "warning",
+            );
+
+            // CRITICAL FIX: Reset items to 'pending' so they are picked up again
+            const pendingReset = processingItems.map((p) => ({
+              ...p,
+              status: "pending",
+              error: null,
+            }));
+
+            await dbHelper.updateMany(pendingReset);
+            pendingReset.forEach((p) => {
+              const idx = this.state.products.findIndex((x) => x.id === p.id);
+              if (idx !== -1) this.state.products[idx] = p;
+            });
+
+            nextDelay = 20000; // 20s
+            this.startCooldownTimer(20);
+          }
+
+          this.renderDashboard();
+
+          if (this.state.isProcessing) {
+            setTimeout(() => this.processNextBatch(), nextDelay);
+          }
+        },
+
+        startCooldownTimer(seconds) {
+          const timerEl = document.getElementById("cooldown-badge");
+          const secondsEl = document.getElementById("cooldown-seconds");
+          const msgEl = document.getElementById("status-message");
+          const iconEl = document.getElementById("status-icon");
+
+          timerEl.classList.remove("hidden");
+          msgEl.textContent = "Rate Limit Hit. Pausing...";
+          iconEl.classList.remove("animate-spin");
+          iconEl.classList.add("text-amber-500");
+
+          let remaining = seconds;
+          secondsEl.textContent = remaining;
+
+          const interval = setInterval(() => {
+            remaining--;
+            secondsEl.textContent = remaining;
+            if (remaining <= 0 || !this.state.isProcessing) {
+              clearInterval(interval);
+              timerEl.classList.add("hidden");
+              msgEl.textContent = "Resuming...";
+              iconEl.classList.add("animate-spin");
+              iconEl.classList.remove("text-amber-500");
+            }
+          }, 1000);
+        },
+
+        // --- Utilities ---
+        extractJSON(text) {
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            const start = text.indexOf("[");
+            const end = text.lastIndexOf("]");
+            if (start !== -1 && end !== -1) {
+              try {
+                return JSON.parse(text.substring(start, end + 1));
+              } catch (e2) {
+                // Single object fallback
+                const startObj = text.indexOf("{");
+                const endObj = text.lastIndexOf("}");
+                if (startObj !== -1 && endObj !== -1) {
+                  try {
+                    return [JSON.parse(text.substring(startObj, endObj + 1))];
+                  } catch (e3) {
+                    throw new Error("Malformed JSON");
+                  }
+                }
+                throw new Error("Malformed JSON in AI response");
+              }
+            }
+            throw new Error("No JSON array found");
+          }
+        },
+
+        // --- Rendering ---
+        renderDashboard() {
+          const { products, currentPage, itemsPerPage } = this.state;
+
+          // Stats
+          const total = products.length;
+          const completed = products.filter(
+            (p) => p.status === "completed",
+          ).length;
+          const failed = products.filter((p) => p.status === "failed").length;
+          const pending = products.filter(
+            (p) => p.status === "pending" || p.status === "processing",
+          ).length;
+
+          document.getElementById("stat-total").textContent = total;
+          document.getElementById("stat-completed").textContent = completed;
+          document.getElementById("stat-queue").textContent = pending;
+          document.getElementById("stat-failed").textContent = failed;
+
+          // Progress Bar
+          const progress =
+            total === 0 ? 0 : Math.round(((completed + failed) / total) * 100);
+          document.getElementById("progress-bar").style.width = `${progress}%`;
+
+          // Buttons
+          document.getElementById("btn-process").disabled = total === 0;
+          document.getElementById("btn-retry").style.display =
+            failed > 0 ? "flex" : "none";
+          this.updateProcessButton();
+
+          // Pagination
+          const totalPages = Math.ceil(total / itemsPerPage) || 1;
+          if (currentPage > totalPages) this.state.currentPage = totalPages;
+          const startIdx = (this.state.currentPage - 1) * itemsPerPage;
+          const endIdx = startIdx + itemsPerPage;
+          const pageItems = products.slice(startIdx, endIdx);
+
+          document.getElementById("pagination-info").textContent =
+            total > 0
+              ? `Showing ${startIdx + 1}-${Math.min(endIdx, total)} of ${total}`
+              : "Showing 0-0 of 0";
+          document.getElementById("btn-prev").disabled =
+            this.state.currentPage === 1;
+          document.getElementById("btn-next").disabled =
+            this.state.currentPage === totalPages || total === 0;
+
+          // Table Rows
+          const tbody = document.getElementById("table-body");
+          if (total === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-slate-400 italic">No products in queue.</td></tr>`;
+            return;
+          }
+          tbody.innerHTML = pageItems.map((p) => this.getRowHTML(p)).join("");
+          lucide.createIcons();
+        },
+
+        nextPage() {
+          this.state.currentPage++;
+          this.renderDashboard();
+        },
+        prevPage() {
+          this.state.currentPage--;
+          this.renderDashboard();
+        },
+
+        getRowHTML(p) {
+          const badges = {
+            pending: "bg-slate-100 text-slate-600",
+            processing: "bg-blue-100 text-blue-700 animate-pulse",
+            completed: "bg-emerald-100 text-emerald-700",
+            failed: "bg-red-100 text-red-700",
+          };
+          const badgeClass = `px-2.5 py-0.5 text-xs font-semibold rounded-full ${badges[p.status] || badges.pending}`;
+
+          let contentPreview = "";
+          if (p.status === "completed")
+            contentPreview = `<p class="line-clamp-2 text-xs leading-relaxed opacity-70">${p.description}</p>`;
+          else if (p.status === "failed")
+            contentPreview = `<span class="text-red-500 text-xs flex items-center gap-1 font-mono bg-red-50 p-1 rounded w-full overflow-hidden text-ellipsis whitespace-nowrap" title="${p.error}"><i data-lucide="alert-circle" class="w-3 h-3 flex-shrink-0"></i> ${p.error}</span>`;
+          else if (p.status === "processing")
+            contentPreview = `<span class="text-blue-500 text-xs italic flex items-center gap-1"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Processing...</span>`;
+
+          let actions = "";
+          if (p.status === "completed")
+            actions += `<button onclick="app.openModal('${p.id}')" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors mr-1" title="View/Edit"><i data-lucide="eye" class="w-4 h-4"></i></button>`;
+          actions += `<button onclick="app.deleteProduct('${p.id}')" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+
+          return `
+                    <tr class="hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group">
+                        <td class="px-6 py-4 font-medium text-slate-900 align-top">
+                            <div class="font-semibold text-sm">${p.name}</div>
+                            ${p.company ? `<div class="text-xs text-slate-500 font-normal mt-0.5 flex items-center gap-1"><i data-lucide="building-2" class="w-3 h-3 text-slate-400"></i> ${p.company}</div>` : ""}
+                        </td>
+                        <td class="px-6 py-4 align-top"><span class="${badgeClass}">${p.status}</span></td>
+                        <td class="px-6 py-4 text-slate-600 align-top max-w-md">${contentPreview}</td>
+                        <td class="px-6 py-4 text-right align-top">${actions}</td>
+                    </tr>
+                `;
+        },
+
+        updateProcessButton() {
+          const btn = document.getElementById("btn-process");
+          if (this.state.isProcessing) {
+            btn.innerHTML = `<i data-lucide="pause" class="w-4 h-4"></i> Stop Processing`;
+            btn.className =
+              "flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold transition-all bg-amber-500 hover:bg-amber-600 text-white shadow-amber-200 shadow-md transform active:scale-95";
+          } else {
+            btn.innerHTML = `<i data-lucide="play" class="w-4 h-4"></i> Start Auto-Process`;
+            btn.className =
+              "flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200 shadow-md disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-95";
+          }
+          lucide.createIcons();
+        },
+
+        async deleteProduct(id) {
+          this.state.products = this.state.products.filter((p) => p.id !== id);
+          await dbHelper.delete(id);
+          this.renderDashboard();
+        },
+
+        // --- Modal Logic ---
+        openModal(id) {
+          const p = this.state.products.find((prod) => prod.id === id);
+          if (!p) return;
+
+          this.state.activeModalProduct = p; // Track active product for saves/creative
+
+          document.getElementById("modal-title").textContent = p.name;
+          document.getElementById("modal-subtitle").textContent =
+            `ID: ${p.id.slice(0, 8)}...`;
+          document.getElementById("modal-status-badge").innerHTML =
+            `<span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-bold">Completed</span>`;
+
+          // Populate Inputs
+          document.getElementById("edit-description").value = p.description;
+          document.getElementById("edit-specs").value = p.specs;
+          document.getElementById("link-image").href = p.imageLink;
+
+          document.getElementById("modal-overlay").classList.remove("hidden");
+          lucide.createIcons();
+        },
+
+        closeModal() {
+          document.getElementById("modal-overlay").classList.add("hidden");
+          this.state.activeModalProduct = null;
+        },
+
+        async saveProductEdits() {
+          if (!this.state.activeModalProduct) return;
+
+          const newDesc = document.getElementById("edit-description").value;
+          const newSpecs = document.getElementById("edit-specs").value;
+
+          const updatedProduct = {
+            ...this.state.activeModalProduct,
+            description: newDesc,
+            specs: newSpecs,
+          };
+
+          // Update State & DB
+          const idx = this.state.products.findIndex(
+            (p) => p.id === updatedProduct.id,
+          );
+          if (idx !== -1) this.state.products[idx] = updatedProduct;
+
+          await dbHelper.updateMany([updatedProduct]); // Reuse helper
+          this.showToast("Changes saved!", "success");
+          this.closeModal();
+          this.renderDashboard();
+        },
+
+        // --- Exports ---
+        exportCSV() {
+          if (this.state.products.length === 0) {
+            alert("No data.");
+            return;
+          }
+          const escape = (f) => `"${String(f || "").replace(/"/g, '""')}"`;
+          const headers = [
+            "ID",
+            "Product",
+            "Company",
+            "Description",
+            "Specs",
+            "Image Link",
+            "Status",
+          ];
+          const rows = this.state.products.map((p) =>
+            [
+              escape(p.id),
+              escape(p.name),
+              escape(p.company),
+              escape(p.description),
+              escape(p.specs),
+              escape(p.imageLink),
+              escape(p.status),
+            ].join(","),
+          );
+          this.downloadFile(
+            [headers.join(","), ...rows].join("\n"),
+            "text/csv",
+            "csv",
+          );
+        },
+
+        exportJSON() {
+          if (this.state.products.length === 0) {
+            alert("No data.");
+            return;
+          }
+          const jsonStr = JSON.stringify(this.state.products, null, 2);
+          this.downloadFile(jsonStr, "application/json", "json");
+        },
+
+        downloadFile(content, type, ext) {
+          const blob = new Blob([content], { type: type });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `product_genius_${Date.now()}.${ext}`;
+          a.click();
+        },
+
+        showToast(msg, type = "info") {
+          const toast = document.createElement("div");
+          toast.className = `p-3 rounded-lg shadow-lg text-xs font-medium border flex items-center gap-2 fade-in ${type === "error" ? "bg-red-50 text-red-700 border-red-200" : type === "warning" ? "bg-amber-50 text-amber-700 border-amber-200" : type === "success" ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-white text-slate-700 border-slate-200"}`;
+          toast.innerHTML = `<span>${msg}</span>`;
+          document.getElementById("toast-container").appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+        },
+      };
+
+      window.addEventListener("DOMContentLoaded", () => app.init());
+    </script>
+  </body>
+</html>
